@@ -1,0 +1,111 @@
+openapi: '3.0.0'
+info:
+  description: " Yuvajunction - Party service
+  
+  
+  
+  That API use:
+  
+  
+ 
+  
+  **ChangeLog**
+  
+  |Version|Release|Delivery Sprint|Impacts                    |Type    |Note|
+  
+  |-----|---------|----|--------------------------------------|-----------|-|
+  
+  |1.0.0|   |-   |**Initial version**                   |           | | 
+    
+  
+  
+  "
+  version: 1.0.0
+  title: Party API
+paths:
+  /create:
+    post:
+      tags:
+      - Create Party
+      summary: "The service creates a new Party item in the database."
+      description: This service is called when a new party is registered. It will take the relevant paty infrmation as input and create a new item in Party table.
+      operationId: "create"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartyRequest' 
+              
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PartyResponse"
+        '400':
+          description: Business Exception
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ExecuteException'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ExecuteException'       
+      security:
+      - basicAuth: []
+components:  
+  schemas:
+    PartyDemographics:
+      type: object
+      description: party demographics  
+      properties:
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        dob:
+          type: string
+    PartyRequest:
+      allOf:
+        - $ref: '#/components/schemas/PartyDemographics'
+        - $ref: '#/components/schemas/PartyContact'
+    PartyContact:
+      anyOf:
+        - type: object
+          description: email
+          required:
+            - email
+          properties:
+            email:
+              type: string 
+        - type: object
+          description: phone
+          required:
+            - phone
+          properties:
+            phone:
+              type: string      
+    PartyResponse:  
+      type: object
+      properties:
+        partyID:
+          type: string
+          description: party ID created
+        
+   
+    ExecuteException:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The code identifying the type of error
+        message:
+          type: string
+          description: The error message
