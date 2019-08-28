@@ -23,6 +23,42 @@ info:
   version: 1.0.0
   title: Party API
 paths:
+  /get:
+    get:
+      tags:
+      - Get Party details
+      summary: "The service get a Party detail from the database."
+      description: This service is called when a party details is to be retrived by its id.
+      operationId: "get"
+      parameters:
+        - in: path
+          required: true
+          name: partyID
+          schema:
+            type: string
+            
+              
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PartyResponse"
+        '400':
+          description: Business Exception
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ExecuteException'
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ExecuteException'       
+      security:
+      - basicAuth: []
   /create:
     post:
       tags:
@@ -35,7 +71,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PartyRequest' 
+              $ref: '#/components/schemas/CreatePartyRequest' 
               
       responses:
         '200':
@@ -43,7 +79,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PartyResponse"
+                $ref: "#/components/schemas/CreatePartyResponse"
         '400':
           description: Business Exception
           content:
@@ -72,7 +108,29 @@ components:
           type: string
         dob:
           type: string
-    PartyRequest:
+    PartyResponse:
+      allOf:
+        - type: string
+          properties:
+            id: 
+              type: string
+        - $ref: '#/components/schemas/PartyDemographics'
+        - type: object
+          properties:
+            addresses:
+              type: array
+              items:
+                $ref: '#/components/schemas/PartyAddress'
+            contacts:
+              type: array
+              items:
+                $ref: '#/components/schemas/PartyContact'
+            properties:
+              type: array
+              items:
+                $ref: '#/components/schemas/PartyProperty'
+          
+    CreatePartyRequest:
       allOf:
         - $ref: '#/components/schemas/PartyDemographics'
         - $ref: '#/components/schemas/PartyContact'
@@ -91,14 +149,48 @@ components:
             - phone
           properties:
             phone:
-              type: string      
-    PartyResponse:  
+              type: string 
+    
+    PartyAddress:
+      type: object
+      properties:
+        address1:
+          type: string
+        address2:
+          type: string
+        zip:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+    
+    PartyProperty:
+      type: object
+      properties:
+        propertyId:
+          type: string
+        propertyType:
+          type: string
+          enum: [OWNED,RENTED,BROKERED]
+        propertyStatus:
+          type: string
+          enum: [ACTIVE,INACTIVE,INPROGRESS]  
+        startDate:
+          type: string
+        endDate:
+          type: string
+        
+          
+    CreatePartyResponse:  
       type: object
       properties:
         partyID:
           type: string
           description: party ID created
-        
+      
    
     ExecuteException:
       type: object
