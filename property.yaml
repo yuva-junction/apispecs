@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 openapi: '3.0.0'
 info:
   description: " Yuvajunction - Property service
@@ -24,11 +23,10 @@ info:
   version: 1.0.0
   title: Property API
  
-servers:
-  - url: /property 
+ 
     
 paths:
-  /{propertyId}:
+  /property/{propertyId}:
     get:
       tags:
       - Get Property details
@@ -64,7 +62,8 @@ paths:
                 $ref: '#/components/schemas/ExecuteException'       
       security:
       - basicAuth: []
-  /:
+      
+  /property:
     post:
       tags:
       - Create Party
@@ -198,200 +197,3 @@ components:
         message:
           type: string
           description: The error message
-=======
-openapi: '3.0.0'
-info:
-  description: " Yuvajunction - Property service
-  
-  
-  
-  That API use:
-  
-  
- 
-  
-  **ChangeLog**
-  
-  |Version|Release|Delivery Sprint|Impacts                    |Type    |Note|
-  
-  |-----|---------|----|--------------------------------------|-----------|-|
-  
-  |1.0.0|   |-   |**Initial version**                   |           | | 
-    
-  
-  
-  "
-  version: 1.0.0
-  title: Property API
-paths:
-  /get:
-    get:
-      tags:
-      - Get Property details
-      summary: "The service get a property detail from the database."
-      description: This service is called when a property details is to be retrived by its id.
-      operationId: "get"
-      parameters:
-        - in: path
-          required: true
-          name: propertyID
-          schema:
-            type: string
-            
-              
-      responses:
-        '200':
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PropertyResponse"
-        '400':
-          description: Business Exception
-          content:
-            application/json:
-              schema: 
-                $ref: '#/components/schemas/ExecuteException'
-        '500':
-          description: Server Error
-          content:
-            application/json:
-              schema: 
-                $ref: '#/components/schemas/ExecuteException'       
-      security:
-      - basicAuth: []
-  /create:
-    post:
-      tags:
-      - Create Party
-      summary: "The service creates a new Property item in the database."
-      description: This service is called when a new property is registered. It will take the relevant property infrmation as input and create a new item in Property table.
-      operationId: "create"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreatePropertyRequest' 
-              
-      responses:
-        '200':
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PropertyResponse"
-        '400':
-          description: Business Exception
-          content:
-            application/json:
-              schema: 
-                $ref: '#/components/schemas/ExecuteException'
-        '500':
-          description: Server Error
-          content:
-            application/json:
-              schema: 
-                $ref: '#/components/schemas/ExecuteException'       
-      security:
-      - basicAuth: []
-components:  
-  schemas:
-    PropertyResponse:
-      allOf:
-        - type: object
-          properties:
-            id: 
-              type: string
-        - $ref: '#/components/schemas/PropertyAddress'
-        - type: object
-          properties:
-            owners:
-              type: array
-              items:
-                $ref: '#/components/schemas/PropertyParty'
-            renters:
-              type: array
-              items:
-                $ref: '#/components/schemas/PropertyParty'
-            brokers:
-              type: array
-              items:
-                $ref: '#/components/schemas/PropertyParty'
-        - type: object
-          properties:
-            images:
-              type: array
-              items:
-                $ref: '#/components/schemas/PropertyImage'       
-    PropertyParty:
-      type: object
-      description: party-property deatils
-      properties:
-        partyId:
-          type: string
-        status:
-          type: string
-          enum: [ACTIVE,INACTIVE,INPROGRESS] 
-        startdate:
-          type: string
-        enddate:
-          type: string  
-              
-    PropertyAddress:
-      type: object
-      properties:
-        address1:
-          type: string
-        address2:
-          type: string
-        zip:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        country:
-          type: string
-    
-    PropertyImage:
-      type: object
-      properties:
-        imageURL:
-          type: string
-        uploaddate:
-          type: string
-        uploadedby:
-          type: string  
-          
-    CreatePropertyRequest:
-      allOf:
-        - $ref: '#/components/schemas/PropertyAddress'
-        - type: object
-          properties:
-            ownerId:
-              type: string
-            renterIds:
-              type: array
-              items:
-                type: string
-            broker:
-              type: string 
-        - type: object
-          properties:
-            images:
-              type: array
-              items:         
-                type: string
-    
-    
-    ExecuteException:
-      type: object
-      properties:
-        code:
-          type: string
-          description: The code identifying the type of error
-        message:
-          type: string
-          description: The error message
->>>>>>> 830aa61cf666e6ee6854709fe9f3d1b3ac080357

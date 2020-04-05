@@ -23,10 +23,9 @@ info:
   version: 1.0.0
   title: Party API
   
-servers:
-  - url: /party  
+  
 paths:
-  /{partyId}:
+  /party/{partyId}:
     get:
       tags:
       - Get Party details
@@ -62,7 +61,7 @@ paths:
                 $ref: '#/components/schemas/ExecuteException'       
       security:
       - basicAuth: []
-  /:
+  /party:
     post:
       tags:
       - Create Party
@@ -98,7 +97,7 @@ paths:
       security:
       - basicAuth: []
       
-  /search:
+  /parties:
     post:
       tags:
       - Seach Parties
@@ -111,7 +110,26 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/SearchPartyRequest' 
-              
+      parameters:
+        - in: query
+          required: false
+          description: if true, the service response must include all addresses for each party. Default is false.
+          name: getAddresses
+          schema:
+            type: boolean
+        - in: query
+          required: false
+          description: if true, the service response must include all peroperties for each party. Default is false.
+          name: getProperties
+          schema:
+            type: boolean
+        - in: query
+          required: false
+          description: if true, the service response must include all contacts for each party. Default is false.
+          name: getContacts
+          schema:
+            type: boolean    
+                    
       responses:
         '200':
           description: "OK"
@@ -261,6 +279,7 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/PartyResponse'
+
       
           
     ExecuteException:
