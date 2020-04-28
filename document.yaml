@@ -26,17 +26,17 @@ info:
  
     
 paths:
-  /transaction/{transactionId}:
+  /document/{documentId}:
     get:
       tags:
-      - Get Transaction details
-      summary: "The service get a transaction detail from the database."
-      description: This service is called when a transaction detail is to be retrived by its id.
+      - Get Document details
+      summary: "The service get a document metadata from the database."
+      description: This service is called when a document metadata is to be retrived by its id.
       operationId: "get"
       parameters:
         - in: path
           required: true
-          name: transactionId
+          name: documentId
           schema:
             type: string
             
@@ -47,7 +47,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TransactionResponse"
+                $ref: "#/components/schemas/DocumentResponse"
         '400':
           description: Business Exception
           content:
@@ -63,19 +63,19 @@ paths:
       security:
       - basicAuth: []
       
-  /transaction:
+  /document:
     post:
       tags:
-      - Create Transaction
-      summary: "The service creates a new transaction  in the database."
-      description: This service is called when a new transaction is crated. It will take the relevant transaction infrmation as input and create a new item in transaction table.
+      - Create Document
+      summary: "The service creates a new document  in the database."
+      description: This service is called when a new document metada is crated. It will take the relevant document information as input and create a new item in document table.
       operationId: "create"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateTransactionRequest' 
+              $ref: '#/components/schemas/CreateDocumentRequest' 
               
       responses:
         '200':
@@ -83,7 +83,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/TransactionResponse"
+                $ref: "#/components/schemas/DocumentResponse"
         '400':
           description: Business Exception
           content:
@@ -100,39 +100,31 @@ paths:
       - basicAuth: []
 components:  
   schemas:
-    TransactionResponse:
+    DocumentResponse:
       allOf:
         - type: object
           properties:
             id: 
               type: string
-            status:
+            documentType:
               type: string
-              enum: [COMPLETE,FAILED,PENDING]   
-            transactionDate:
+              enum: [RentalAgreement,Others]   
+            creationDate:
               type: string
               format: date-time
-            senderId:
+            location:
               type: string
-            receiverId:
-              type: string
-            amount:
-              type: number
-              format: double    
-                   
-     
+              format: uri
           
-    CreateTransactionRequest:
+    CreateDocumentRequest:
       allOf:
         - type: object
           properties:
-            senderId:
+            location:
               type: string
-            receiverId:
+            documentType:
               type: string
-            amount:
-              type: number
-              format: double  
+              enum: [RentalAgreement,Others]
             
     
     ExecuteException:
