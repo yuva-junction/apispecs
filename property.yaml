@@ -66,7 +66,7 @@ paths:
   /property:
     post:
       tags:
-      - Create Party
+      - Create Property
       summary: "The service creates a new Property item in the database."
       description: This service is called when a new property is registered. It will take the relevant property infrmation as input and create a new item in Property table.
       operationId: "create"
